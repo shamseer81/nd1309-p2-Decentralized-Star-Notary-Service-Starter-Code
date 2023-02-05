@@ -38,10 +38,6 @@ contract StarNotary is ERC721 {
     }
 
 
-    // Function that allows you to convert an address into a payable address
-    function _make_payable(address x) internal pure returns (address payable) {
-        return address(uint160(x));
-    }
 
     function buyStar(uint256 _tokenId) public  payable {
         require(starsForSale[_tokenId] > 0, "The Star should be up for sale");
@@ -50,8 +46,8 @@ contract StarNotary is ERC721 {
         address ownerAddress = ownerOf(_tokenId);
         require(msg.value > starCost, "You need to have enough Ether");
         _transferFrom(ownerAddress, msg.sender, _tokenId); // We can't use _addTokenTo or_removeTokenFrom functions, now we have to use _transferFrom
-        address payable ownerAddressPayable = _make_payable(ownerAddress); // We need to make this conversion to be able to use transfer() function to transfer ethers
-        ownerAddressPayable.transfer(starCost);
+        address payable ownerAddressP = address(uint160(ownerAddress));
+        ownerAddressP.transfer(starCost);
         if(msg.value > starCost) {
             msg.sender.transfer(msg.value - starCost);
         }
@@ -66,7 +62,6 @@ contract StarNotary is ERC721 {
     function exchangeStars(uint256 tokenId1, uint256 tokenId2) public {
         //1. Passing to star tokenId you will need to check if the owner of _tokenId1 or _tokenId2 is the sender
        require(ownerOf(tokenId1) == msg.sender || ownerOf(tokenId2) == msg.sender  , "Sender needs to be owner of atleast one of the token");
-       require(tokenId1 == tokenId2  , "  Token cannot be same ");
       
         //2. You don't have to check for the price of the token (star)
         //3. Get the owner of the two tokens (ownerOf(_tokenId1), ownerOf(_tokenId2)
