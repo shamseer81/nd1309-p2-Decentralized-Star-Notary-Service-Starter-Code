@@ -7,6 +7,7 @@ module.exports = {
     filename: "index.js",
     path: path.resolve(__dirname, "dist"),
   },
+  
   plugins: [
     new CopyWebpackPlugin({ 
       patterns:
@@ -16,4 +17,5 @@ module.exports = {
   devServer: { static: {
     directory: path.join(__dirname, "./")
   }, compress: true },
+  mode: 'development'  
 };

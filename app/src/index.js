@@ -11,6 +11,7 @@ const App = {
 
     try {
       // get contract instance
+      
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = starNotaryArtifact.networks[networkId];
       this.meta = new web3.eth.Contract(
@@ -28,6 +29,7 @@ const App = {
 
   setStatus: function(message) {
     const status = document.getElementById("status");
+    console.log(message);
     status.innerHTML = message;
   },
 
@@ -35,13 +37,21 @@ const App = {
     const { createStar } = this.meta.methods;
     const name = document.getElementById("starName").value;
     const id = document.getElementById("starId").value;
-    await createStar(name, id).send({from: this.account});
+    const symbol = document.getElementById("symbol").value;
+    await createStar(name, id,symbol).send({from: this.account});
     App.setStatus("New Star Owner is " + this.account + ".");
   },
 
   // Implement Task 4 Modify the front end of the DAPP
   lookUp: async function (){
-    
+    const { lookUptokenIdToStarInfo } = this.meta.methods;
+    const id = document.getElementById("lookid").value;
+    const star = await lookUptokenIdToStarInfo(id).call();
+    if (star == "") {
+      App.setStatus(`Star ${id} do not exists`);
+    } else {
+      App.setStatus(`Star name is "${star}"`);
+    }
   }
 
 };
