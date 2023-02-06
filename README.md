@@ -1,5 +1,6 @@
 1. Specify the Truffle version and OpenZeppelin version used in the project.
 **Truffle v5.7.5 (core: 5.7.5)**
+**openzeppelin-solidity 2.3**
 
 2. Your ERC-721 Token Name
 **Shamseer**
